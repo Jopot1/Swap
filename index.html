@@ -50,31 +50,28 @@
         }
     </script>
     <style>
-        /* Verrouillage strict de la largeur pour éviter tout décalage horizontal */
+        /* Verrouillage du scroll document pour éviter le rebond et le décalage horizontal */
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow-x: hidden !important;
-            position: fixed;
-            left: 0;
-            top: 0;
+            overflow: hidden;
+            overscroll-behavior: none; /* Empêche le rebond élastique de Safari */
         }
         body {
             -webkit-tap-highlight-color: transparent;
             user-select: none;
-            touch-action: manipulation;
-            color: #0F172A;
-            /* Empêche le rebond élastique sur iOS pour un feeling plus natif */
-            overflow: hidden;
+            /* touch-action: pan-y permet le défilement vertical mais bloque le latéral au niveau système */
+            touch-action: pan-y;
+            background-color: #F8FAFC;
         }
         #root {
             height: 100%;
             width: 100%;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
         .safe-area-pt { padding-top: env(safe-area-inset-top); }
         .safe-area-pb { padding-bottom: env(safe-area-inset-bottom); }
@@ -91,9 +88,6 @@
             background-color: #0F172A;
             color: #f1f5f9;
         }
-        body {
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
     </style>
 <script type="importmap">
 {
@@ -107,7 +101,7 @@
 </script>
 <link rel="stylesheet" href="/index.css">
 </head>
-<body class="bg-iosBg dark:bg-iosDarkBg text-appText dark:text-slate-100 transition-colors duration-300">
+<body class="bg-iosBg dark:bg-iosDarkBg text-appText dark:text-slate-100">
     <div id="root"></div>
 <script type="module" src="/index.tsx"></script>
 </body>

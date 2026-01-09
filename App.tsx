@@ -146,10 +146,10 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] w-full max-w-md mx-auto overflow-x-hidden overflow-y-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100 relative">
+    <div className="flex flex-col h-[100dvh] w-full max-w-md mx-auto overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100 relative">
       
-      {/* Header */}
-      <header className="flex-none w-full gradient-primary shadow-xl shadow-primary/30 overflow-hidden">
+      {/* Header - Fixed to top of flex container */}
+      <header className="flex-none w-full gradient-primary shadow-xl shadow-primary/30 z-50">
         <div className="safe-area-pt" />
         <div className="flex justify-between items-center h-24 px-6">
           <h1 className="text-2xl font-black tracking-tight text-white drop-shadow-md">
@@ -186,8 +186,8 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content: overflow-x-hidden strict */}
-      <main className="flex-1 overflow-y-auto overflow-x-hidden px-4 pt-6 pb-6 w-full">
+      {/* Main Content - Only scrollable area */}
+      <main className="flex-1 overflow-y-auto overflow-x-hidden px-4 pt-6 pb-6 w-full overscroll-contain">
         {error && (
           <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-xl flex items-start gap-3">
             <AlertCircle size={20} className="text-red-500 mt-0.5 flex-shrink-0" />
@@ -196,9 +196,9 @@ const App: React.FC = () => {
         )}
 
         {activeTab === 'converter' ? (
-          <div className="space-y-6 animate-in fade-in duration-500 slide-in-from-top-4 w-full overflow-x-hidden">
+          <div className="space-y-6 animate-in fade-in duration-500 slide-in-from-top-4 w-full">
             {/* Input Card */}
-            <div className="bg-white dark:bg-iosDarkCard rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 w-full max-w-full">
+            <div className="bg-white dark:bg-iosDarkCard rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 w-full">
               <div className="space-y-6">
                 <div className="space-y-2">
                   <label className="text-[13px] font-black uppercase tracking-widest ml-1 text-primary/80 dark:text-indigo-200">
@@ -274,7 +274,6 @@ const App: React.FC = () => {
                   <Star size={24} fill={isFavorite ? "currentColor" : "none"} strokeWidth={2.5} />
                 </button>
               </div>
-              {/* Decorative elements strictly contained */}
               <div className="absolute -right-12 -bottom-12 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none" />
             </div>
 
@@ -284,7 +283,7 @@ const App: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500 w-full overflow-x-hidden">
+          <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500 w-full">
             {favorites.length === 0 ? (
               <div className="text-center py-20 space-y-6">
                 <div className="w-24 h-24 gradient-primary rounded-full flex items-center justify-center mx-auto text-white shadow-xl shadow-primary/30 opacity-30">
@@ -316,8 +315,8 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Footer */}
-      <nav className="flex-none w-full bg-white/90 dark:bg-iosDarkCard/90 backdrop-blur-2xl border-t dark:border-slate-800 px-8 pt-3 pb-safe shadow-[0_-4px_25px_rgba(0,0,0,0.08)] safe-area-pb overflow-hidden">
+      {/* Navigation - Fixed to bottom of flex container */}
+      <nav className="flex-none w-full bg-white/90 dark:bg-iosDarkCard/90 backdrop-blur-2xl border-t dark:border-slate-800 px-8 pt-3 pb-safe shadow-[0_-4px_25px_rgba(0,0,0,0.08)] safe-area-pb z-50">
         <div className="flex justify-around h-16 items-center w-full">
           <TabButton id="converter" icon={RefreshCw} label="Convertir" />
           <TabButton id="favorites" icon={Star} label="Favoris" />
