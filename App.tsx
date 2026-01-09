@@ -146,9 +146,9 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] max-w-md mx-auto overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100">
+    <div className="flex flex-col h-[100dvh] w-full max-w-md mx-auto overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100">
       
-      {/* Header: Fixed within the flex container to respect max-width and vertical centering */}
+      {/* Header */}
       <header className="flex-none w-full gradient-primary shadow-xl shadow-primary/30">
         <div className="safe-area-pt" />
         <div className="flex justify-between items-center h-24 px-6">
@@ -186,7 +186,7 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content: flex-1 makes it scrollable in between */}
+      {/* Main Content */}
       <main className="flex-1 overflow-y-auto px-4 pt-6 pb-6">
         {error && (
           <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-xl flex items-start gap-3">
@@ -214,7 +214,6 @@ const App: React.FC = () => {
                   />
                 </div>
 
-                {/* Separation line: adjusted for dark mode visibility */}
                 <div className="h-px bg-slate-100 dark:bg-slate-700" />
 
                 <div className="flex items-center justify-between gap-4">
@@ -316,7 +315,7 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Footer: Flex-none and full width within max-width parent */}
+      {/* Footer */}
       <nav className="flex-none w-full bg-white/90 dark:bg-iosDarkCard/90 backdrop-blur-2xl border-t dark:border-slate-800 px-8 pt-3 pb-safe shadow-[0_-4px_25px_rgba(0,0,0,0.08)] safe-area-pb">
         <div className="flex justify-around h-16 items-center">
           <TabButton id="converter" icon={RefreshCw} label="Convertir" />
