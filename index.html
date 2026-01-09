@@ -50,42 +50,62 @@
         }
     </script>
     <style>
+        /* Correction globale pour éviter les débordements de pixels */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            overflow: hidden !important;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
+            /* Empêche le décalage horizontal */
+            overflow-x: hidden;
         }
+
         body {
-            -webkit-tap-highlight-color: transparent;
             user-select: none;
             touch-action: manipulation;
             color: #0F172A;
             background-color: #F8FAFC;
             transition: background-color 0.3s ease, color 0.3s ease;
+            /* Assure que rien ne dépasse sur les côtés */
+            max-width: 100%;
         }
+
         #root {
             width: 100%;
             height: 100%;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            left: 0;
+            right: 0;
         }
+
         .safe-area-pt { padding-top: env(safe-area-inset-top); }
         .safe-area-pb { padding-bottom: env(safe-area-inset-bottom); }
+        
         .gradient-primary {
             background: linear-gradient(135deg, #3B00E8 0%, #A800E8 100%);
         }
+        
         .gradient-text {
             background: linear-gradient(135deg, #3B00E8 0%, #A800E8 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+
         html.dark body {
             background-color: #0F172A;
             color: #f1f5f9;
