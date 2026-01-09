@@ -146,7 +146,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] w-full max-w-md mx-auto overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100">
+    /* 
+       Utilisation de left-1/2 et -translate-x-1/2 au lieu de mx-auto 
+       pour un centrage plus robuste sur iOS en mode fixed.
+    */
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col h-full w-full max-w-md overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100">
       
       {/* Header */}
       <header className="flex-none w-full gradient-primary shadow-xl shadow-primary/30">
@@ -187,7 +191,7 @@ const App: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto px-4 pt-6 pb-6">
+      <main className="flex-1 overflow-y-auto px-4 pt-6 pb-6 scroll-smooth">
         {error && (
           <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-xl flex items-start gap-3">
             <AlertCircle size={20} className="text-red-500 mt-0.5 flex-shrink-0" />
@@ -217,12 +221,12 @@ const App: React.FC = () => {
                 <div className="h-px bg-slate-100 dark:bg-slate-700" />
 
                 <div className="flex items-center justify-between gap-4">
-                  <div className="flex-1 space-y-1">
+                  <div className="flex-1 space-y-1 min-w-0">
                     <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">De</label>
                     <select
                       value={fromCurrency}
                       onChange={(e) => setFromCurrency(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2.5 px-2 text-base font-bold border-none outline-none focus:ring-2 focus:ring-primary/20 appearance-none text-appText dark:text-white"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2.5 px-2 text-base font-bold border-none outline-none appearance-none text-appText dark:text-white truncate"
                     >
                       {SUPPORTED_CURRENCIES.map(c => (
                         <option key={c.code} value={c.code} className="dark:bg-iosDarkCard">{c.code} - {c.name}</option>
@@ -232,17 +236,17 @@ const App: React.FC = () => {
 
                   <button 
                     onClick={swapCurrencies}
-                    className="p-3.5 gradient-primary rounded-full text-white shadow-lg shadow-primary/30 active:scale-90 transition-transform mt-5"
+                    className="p-3.5 gradient-primary rounded-full text-white shadow-lg shadow-primary/30 active:scale-90 transition-transform mt-5 flex-shrink-0"
                   >
                     <ArrowLeftRight size={20} />
                   </button>
 
-                  <div className="flex-1 space-y-1 text-right">
+                  <div className="flex-1 space-y-1 text-right min-w-0">
                     <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest mr-1">À</label>
                     <select
                       value={toCurrency}
                       onChange={(e) => setToCurrency(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2.5 px-2 text-base font-bold border-none outline-none focus:ring-2 focus:ring-primary/20 appearance-none text-right text-appText dark:text-white"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2.5 px-2 text-base font-bold border-none outline-none appearance-none text-right text-appText dark:text-white truncate"
                     >
                       {SUPPORTED_CURRENCIES.map(c => (
                         <option key={c.code} value={c.code} className="dark:bg-iosDarkCard">{c.code} - {c.name}</option>
