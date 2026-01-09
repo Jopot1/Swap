@@ -50,31 +50,38 @@
         }
     </script>
     <style>
-        /* Verrouillage du scroll document pour éviter le rebond et le décalage horizontal */
+        /* Verrouillage absolu du viewport pour supprimer les barres Safari */
         html, body {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
-            overscroll-behavior: none; /* Empêche le rebond élastique de Safari */
+            overflow: hidden !important;
+            overscroll-behavior: none;
+            position: fixed; /* Empêche tout mouvement du body par le système */
         }
         body {
             -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
             user-select: none;
-            /* touch-action: pan-y permet le défilement vertical mais bloque le latéral au niveau système */
-            touch-action: pan-y;
             background-color: #F8FAFC;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
         #root {
-            height: 100%;
-            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            width: 100%;
+            height: 100%;
         }
         .safe-area-pt { padding-top: env(safe-area-inset-top); }
         .safe-area-pb { padding-bottom: env(safe-area-inset-bottom); }
+        
         .gradient-primary {
             background: linear-gradient(135deg, #3B00E8 0%, #A800E8 100%);
         }
@@ -86,7 +93,6 @@
         }
         html.dark body {
             background-color: #0F172A;
-            color: #f1f5f9;
         }
     </style>
 <script type="importmap">
