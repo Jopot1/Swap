@@ -5,11 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Swap</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3B00E8">
+
     <!-- iOS PWA Optimizations -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Swap">
-    <!-- C'est cette ligne qui définit l'icône sur votre iPhone -->
     <link rel="apple-touch-icon" href="logo.png">
     
     <script>
@@ -51,6 +55,15 @@
             user-select: none;
             touch-action: manipulation;
             color: #0F172A;
+            /* Empêche le rebond élastique sur iOS pour un feeling plus natif */
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+        #root {
+            height: 100%;
+            overflow: hidden;
         }
         .safe-area-pt { padding-top: env(safe-area-inset-top); }
         .safe-area-pb { padding-bottom: env(safe-area-inset-bottom); }
@@ -63,7 +76,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        /* Smooth transition for theme switching */
         html.dark body {
             background-color: #0F172A;
             color: #f1f5f9;

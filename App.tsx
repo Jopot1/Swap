@@ -28,29 +28,22 @@ const App: React.FC = () => {
   const [lastUpdated, setLastUpdated] = useState<string>('');
   const [isEditingFavorites, setIsEditingFavorites] = useState<boolean>(false);
   
-  // Theme state initialized with system preference unless a manual override exists
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem(STORAGE_KEYS.THEME);
     if (saved) return saved as 'light' | 'dark';
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
-  // Listen to system theme changes in real-time
   useEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
     const handleChange = (e: MediaQueryListEvent) => {
       const hasManualPreference = localStorage.getItem(STORAGE_KEYS.THEME) !== null;
-      if (!hasManualPreference) {
-        setTheme(e.matches ? 'dark' : 'light');
-      }
+      if (!hasManualPreference) setTheme(e.matches ? 'dark' : 'light');
     };
-
     mediaQuery.addEventListener('change', handleChange);
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  // Theme effect to apply class to document element
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -59,15 +52,11 @@ const App: React.FC = () => {
     }
   }, [theme]);
 
-  // Initial Load: Favorites
   useEffect(() => {
     const savedFavorites = localStorage.getItem(STORAGE_KEYS.FAVORITES);
-    if (savedFavorites) {
-      setFavorites(JSON.parse(savedFavorites));
-    }
+    if (savedFavorites) setFavorites(JSON.parse(savedFavorites));
   }, []);
 
-  // Fetch Rates whenever the base currency changes
   const loadRates = useCallback(async (base: string) => {
     setLoading(true);
     setError(null);
@@ -82,12 +71,10 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Automatically load rates when base currency changes
   useEffect(() => {
     loadRates(fromCurrency);
   }, [fromCurrency, loadRates]);
 
-  // Conversions Calculation
   const convertedAmount = useMemo(() => {
     if (!rates || !rates.rates[toCurrency]) return '0.00';
     const numAmount = parseFloat(amount) || 0;
@@ -120,7 +107,6 @@ const App: React.FC = () => {
     localStorage.setItem(STORAGE_KEYS.THEME, newTheme);
   };
 
-  // Direct selection from favorites
   const handleSelectFavorite = useCallback((from: string, to: string) => {
     if (isEditingFavorites) return;
     setFromCurrency(from);
@@ -137,7 +123,6 @@ const App: React.FC = () => {
 
   const isFavorite = favorites.some(f => f.from === fromCurrency && f.to === toCurrency);
 
-  // Components
   const TabButton = ({ id, icon: Icon, label }: { id: 'converter' | 'favorites', icon: any, label: string }) => {
     const isActive = activeTab === id;
     return (
@@ -161,20 +146,20 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen max-w-md mx-auto overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100">
+    <div className="flex flex-col h-[100dvh] max-w-md mx-auto overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100">
       
-      {/* Header with New Gradient */}
-      <header className="safe-area-pt px-6 pb-6 pt-10 gradient-primary shadow-xl shadow-primary/30">
-        <div className="flex justify-between items-center h-10">
+      {/* Header: Fixed within the flex container to respect max-width and vertical centering */}
+      <header className="flex-none w-full gradient-primary shadow-xl shadow-primary/30">
+        <div className="safe-area-pt" />
+        <div className="flex justify-between items-center h-24 px-6">
           <h1 className="text-2xl font-black tracking-tight text-white drop-shadow-md">
             {activeTab === 'converter' ? 'Convertisseur' : 'Mes Favoris'}
           </h1>
           
-          <div className="flex items-center gap-2">
-            {/* Theme Toggle Button */}
+          <div className="flex items-center gap-3">
             <button 
               onClick={toggleTheme}
-              className="p-2 bg-white/20 rounded-full text-white backdrop-blur-md active:opacity-50 transition-all hover:bg-white/30"
+              className="p-3 bg-white/20 rounded-full text-white backdrop-blur-md active:opacity-50 transition-all flex items-center justify-center"
               aria-label="Changer de thème"
             >
               {theme === 'light' ? <Moon size={22} /> : <Sun size={22} />}
@@ -183,7 +168,7 @@ const App: React.FC = () => {
             {activeTab === 'favorites' && favorites.length > 0 && (
               <button 
                 onClick={() => setIsEditingFavorites(!isEditingFavorites)}
-                className="bg-white/20 hover:bg-white/30 text-white font-bold text-sm rounded-full px-4 py-1.5 backdrop-blur-md transition-all active:scale-95"
+                className="bg-white/20 hover:bg-white/30 text-white font-bold text-sm rounded-full px-5 py-2.5 backdrop-blur-md transition-all active:scale-95"
               >
                 {isEditingFavorites ? 'Terminé' : 'Modifier'}
               </button>
@@ -191,7 +176,7 @@ const App: React.FC = () => {
             {activeTab === 'converter' && (
               <button 
                 onClick={() => loadRates(fromCurrency)}
-                className="p-2 bg-white/20 rounded-full text-white backdrop-blur-md active:opacity-50 transition-opacity"
+                className="p-3 bg-white/20 rounded-full text-white backdrop-blur-md active:opacity-50 transition-opacity flex items-center justify-center"
                 aria-label="Rafraîchir"
               >
                 <RefreshCw size={22} className={loading ? 'animate-spin' : ''} />
@@ -201,8 +186,8 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 overflow-y-auto px-4 py-8">
+      {/* Main Content: flex-1 makes it scrollable in between */}
+      <main className="flex-1 overflow-y-auto px-4 pt-6 pb-6">
         {error && (
           <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-xl flex items-start gap-3">
             <AlertCircle size={20} className="text-red-500 mt-0.5 flex-shrink-0" />
@@ -213,10 +198,12 @@ const App: React.FC = () => {
         {activeTab === 'converter' ? (
           <div className="space-y-6 animate-in fade-in duration-500 slide-in-from-top-4">
             {/* Input Card */}
-            <div className="bg-white dark:bg-iosDarkCard rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
+            <div className="bg-white dark:bg-iosDarkCard rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-primary/80 tracking-widest ml-1">Montant à convertir</label>
+                  <label className="text-[13px] font-black uppercase tracking-widest ml-1 text-primary/80 dark:text-indigo-200">
+                    Montant à convertir
+                  </label>
                   <input
                     type="number"
                     inputMode="decimal"
@@ -227,7 +214,8 @@ const App: React.FC = () => {
                   />
                 </div>
 
-                <div className="h-px bg-slate-100 dark:bg-slate-800" />
+                {/* Separation line: adjusted for dark mode visibility */}
+                <div className="h-px bg-slate-100 dark:bg-slate-700" />
 
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex-1 space-y-1">
@@ -235,7 +223,7 @@ const App: React.FC = () => {
                     <select
                       value={fromCurrency}
                       onChange={(e) => setFromCurrency(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2 px-1 text-base font-bold border-none outline-none focus:ring-2 focus:ring-primary/20 appearance-none text-appText dark:text-white"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2.5 px-2 text-base font-bold border-none outline-none focus:ring-2 focus:ring-primary/20 appearance-none text-appText dark:text-white"
                     >
                       {SUPPORTED_CURRENCIES.map(c => (
                         <option key={c.code} value={c.code} className="dark:bg-iosDarkCard">{c.code} - {c.name}</option>
@@ -245,7 +233,7 @@ const App: React.FC = () => {
 
                   <button 
                     onClick={swapCurrencies}
-                    className="p-3 gradient-primary rounded-full text-white shadow-lg shadow-primary/30 active:scale-90 transition-transform mt-5"
+                    className="p-3.5 gradient-primary rounded-full text-white shadow-lg shadow-primary/30 active:scale-90 transition-transform mt-5"
                   >
                     <ArrowLeftRight size={20} />
                   </button>
@@ -255,7 +243,7 @@ const App: React.FC = () => {
                     <select
                       value={toCurrency}
                       onChange={(e) => setToCurrency(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2 px-1 text-base font-bold border-none outline-none focus:ring-2 focus:ring-primary/20 appearance-none text-right text-appText dark:text-white"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2.5 px-2 text-base font-bold border-none outline-none focus:ring-2 focus:ring-primary/20 appearance-none text-right text-appText dark:text-white"
                     >
                       {SUPPORTED_CURRENCIES.map(c => (
                         <option key={c.code} value={c.code} className="dark:bg-iosDarkCard">{c.code} - {c.name}</option>
@@ -266,8 +254,8 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Result Card with New Gradient */}
-            <div className="gradient-primary text-white rounded-xl p-8 shadow-2xl shadow-primary/30 relative overflow-hidden">
+            {/* Result Card */}
+            <div className="gradient-primary text-white rounded-2xl p-8 shadow-2xl shadow-primary/30 relative overflow-hidden">
               <div className="relative z-10 flex justify-between items-start">
                 <div className="space-y-1 flex-1 min-w-0">
                   <p className="text-white/80 text-[10px] font-black uppercase tracking-widest">Résultat Conversion</p>
@@ -280,7 +268,7 @@ const App: React.FC = () => {
                 </div>
                 <button 
                   onClick={toggleFavorite}
-                  className={`p-3 rounded-full backdrop-blur-lg transition-all ml-4 flex-shrink-0 active:scale-90 ${
+                  className={`p-3.5 rounded-full backdrop-blur-lg transition-all ml-4 flex-shrink-0 active:scale-90 ${
                     isFavorite ? 'bg-white text-primary shadow-xl scale-110' : 'bg-white/20 text-white'
                   }`}
                 >
@@ -328,10 +316,12 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Tab Bar with Gradient Icons Support */}
-      <nav className="safe-area-pb bg-white/90 dark:bg-iosDarkCard/90 backdrop-blur-2xl border-t dark:border-slate-800 px-8 pt-3 pb-2 flex justify-around shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
-        <TabButton id="converter" icon={RefreshCw} label="Convertir" />
-        <TabButton id="favorites" icon={Star} label="Favoris" />
+      {/* Footer: Flex-none and full width within max-width parent */}
+      <nav className="flex-none w-full bg-white/90 dark:bg-iosDarkCard/90 backdrop-blur-2xl border-t dark:border-slate-800 px-8 pt-3 pb-safe shadow-[0_-4px_25px_rgba(0,0,0,0.08)] safe-area-pb">
+        <div className="flex justify-around h-16 items-center">
+          <TabButton id="converter" icon={RefreshCw} label="Convertir" />
+          <TabButton id="favorites" icon={Star} label="Favoris" />
+        </div>
       </nav>
     </div>
   );
@@ -370,14 +360,13 @@ const FavoriteItem: React.FC<FavoriteItemProps> = ({ fav, isEditing, onRemove, o
         !isEditing ? 'cursor-pointer hover:border-primary/30 active:bg-slate-50 dark:active:bg-slate-900/50' : 'cursor-default'
       }`}
     >
-      {/* Delete Button (Left side) - Increased width from w-10 to w-14 for more spacing */}
       <div className={`transition-all duration-300 flex items-center justify-center overflow-hidden ${isEditing ? 'w-14 opacity-100' : 'w-0 opacity-0'}`}>
         <button 
           onClick={(e) => {
             e.stopPropagation();
             onRemove(fav.id);
           }}
-          className="text-red-500 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg active:scale-90 transition-transform mr-2"
+          className="text-red-500 bg-red-50 dark:bg-red-900/20 p-2.5 rounded-lg active:scale-90 transition-transform mr-2"
           aria-label="Supprimer"
         >
           <Trash2 size={20} />
@@ -396,7 +385,6 @@ const FavoriteItem: React.FC<FavoriteItemProps> = ({ fav, isEditing, onRemove, o
             </p>
           </div>
         </div>
-        
         {!isEditing && <ChevronRight size={20} className="text-primary dark:text-white" strokeWidth={3} />}
       </div>
     </div>
