@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Swap</title>
+    <!-- iOS PWA Optimizations -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Swap">
+    <!-- C'est cette ligne qui définit l'icône sur votre iPhone -->
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <script>
+        // Appliquer le mode sombre immédiatement pour éviter le flash blanc
+        (function() {
+            const savedTheme = localStorage.getItem('swiftrate_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B00E8',
+                        secondary: '#A800E8',
+                        appText: '#0F172A',
+                        iosBlue: '#3B00E8',
+                        iosGray: '#8E8E93',
+                        iosBg: '#F8FAFC',
+                        iosCard: '#FFFFFF',
+                        iosDarkBg: '#0F172A',
+                        iosDarkCard: '#1E293B'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            touch-action: manipulation;
+            color: #0F172A;
+        }
+        .safe-area-pt { padding-top: env(safe-area-inset-top); }
+        .safe-area-pb { padding-bottom: env(safe-area-inset-bottom); }
+        .gradient-primary {
+            background: linear-gradient(135deg, #3B00E8 0%, #A800E8 100%);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #3B00E8 0%, #A800E8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* Smooth transition for theme switching */
+        html.dark body {
+            background-color: #0F172A;
+            color: #f1f5f9;
+        }
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="bg-iosBg dark:bg-iosDarkBg text-appText dark:text-slate-100 transition-colors duration-300">
+    <div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
