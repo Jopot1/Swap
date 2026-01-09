@@ -6,18 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Swap</title>
     
-    <!-- iOS PWA Capable (Indispensable pour enlever les barres) -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Swap">
-    
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#3B00E8">
+
+    <!-- iOS PWA Optimizations -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Swap">
     <link rel="apple-touch-icon" href="logo.png">
     
     <script>
-        // Appliquer le mode sombre immédiatement
+        // Appliquer le mode sombre immédiatement pour éviter le flash blanc
         (function() {
             const savedTheme = localStorage.getItem('swiftrate_theme');
             if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -50,48 +50,23 @@
         }
     </script>
     <style>
-        /* Verrouillage strict du viewport pour supprimer les barres Safari */
-        :root {
-            --app-height: 100dvh;
-        }
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: var(--app-height);
-            overflow: hidden !important;
-            overscroll-behavior: none;
-            position: fixed; /* Maintient l'app stable en haut de l'écran */
-            top: 0;
-            left: 0;
-        }
-        
         body {
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
             user-select: none;
-            background-color: #F8FAFC;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        #root {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
+            touch-action: manipulation;
+            color: #0F172A;
+            /* Empêche le rebond élastique sur iOS pour un feeling plus natif */
             overflow: hidden;
+            position: fixed;
             width: 100%;
-            height: var(--app-height);
+            height: 100%;
         }
-
-        /* Safe Areas pour l'encoche (notch) iPhone */
+        #root {
+            height: 100%;
+            overflow: hidden;
+        }
         .safe-area-pt { padding-top: env(safe-area-inset-top); }
         .safe-area-pb { padding-bottom: env(safe-area-inset-bottom); }
-        
         .gradient-primary {
             background: linear-gradient(135deg, #3B00E8 0%, #A800E8 100%);
         }
@@ -101,12 +76,12 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
-        html.dark body { background-color: #0F172A; }
-
-        /* Éviter le rebond du scroll sur iOS */
-        main {
-            -webkit-overflow-scrolling: touch;
+        html.dark body {
+            background-color: #0F172A;
+            color: #f1f5f9;
+        }
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
     </style>
 <script type="importmap">
@@ -121,7 +96,7 @@
 </script>
 <link rel="stylesheet" href="/index.css">
 </head>
-<body class="bg-iosBg dark:bg-iosDarkBg text-appText dark:text-slate-100">
+<body class="bg-iosBg dark:bg-iosDarkBg text-appText dark:text-slate-100 transition-colors duration-300">
     <div id="root"></div>
 <script type="module" src="/index.tsx"></script>
 </body>

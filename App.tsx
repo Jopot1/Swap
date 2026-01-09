@@ -146,10 +146,10 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] w-full max-w-md mx-auto overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100 relative">
+    <div className="flex flex-col h-[100dvh] max-w-md mx-auto overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100">
       
-      {/* Header - Fixed to top of flex container */}
-      <header className="flex-none w-full gradient-primary shadow-xl shadow-primary/30 z-50">
+      {/* Header: Fixed within the flex container to respect max-width and vertical centering */}
+      <header className="flex-none w-full gradient-primary shadow-xl shadow-primary/30">
         <div className="safe-area-pt" />
         <div className="flex justify-between items-center h-24 px-6">
           <h1 className="text-2xl font-black tracking-tight text-white drop-shadow-md">
@@ -186,8 +186,8 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content - Only scrollable area */}
-      <main className="flex-1 overflow-y-auto overflow-x-hidden px-4 pt-6 pb-6 w-full overscroll-contain">
+      {/* Main Content: flex-1 makes it scrollable in between */}
+      <main className="flex-1 overflow-y-auto px-4 pt-6 pb-6">
         {error && (
           <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-900/50 rounded-xl flex items-start gap-3">
             <AlertCircle size={20} className="text-red-500 mt-0.5 flex-shrink-0" />
@@ -196,9 +196,9 @@ const App: React.FC = () => {
         )}
 
         {activeTab === 'converter' ? (
-          <div className="space-y-6 animate-in fade-in duration-500 slide-in-from-top-4 w-full">
+          <div className="space-y-6 animate-in fade-in duration-500 slide-in-from-top-4">
             {/* Input Card */}
-            <div className="bg-white dark:bg-iosDarkCard rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 w-full">
+            <div className="bg-white dark:bg-iosDarkCard rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-800">
               <div className="space-y-6">
                 <div className="space-y-2">
                   <label className="text-[13px] font-black uppercase tracking-widest ml-1 text-primary/80 dark:text-indigo-200">
@@ -214,15 +214,16 @@ const App: React.FC = () => {
                   />
                 </div>
 
+                {/* Separation line: adjusted for dark mode visibility */}
                 <div className="h-px bg-slate-100 dark:bg-slate-700" />
 
                 <div className="flex items-center justify-between gap-4">
-                  <div className="flex-1 space-y-1 min-w-0">
+                  <div className="flex-1 space-y-1">
                     <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">De</label>
                     <select
                       value={fromCurrency}
                       onChange={(e) => setFromCurrency(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2.5 px-2 text-base font-bold border-none outline-none focus:ring-2 focus:ring-primary/20 appearance-none text-appText dark:text-white truncate"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2.5 px-2 text-base font-bold border-none outline-none focus:ring-2 focus:ring-primary/20 appearance-none text-appText dark:text-white"
                     >
                       {SUPPORTED_CURRENCIES.map(c => (
                         <option key={c.code} value={c.code} className="dark:bg-iosDarkCard">{c.code} - {c.name}</option>
@@ -232,17 +233,17 @@ const App: React.FC = () => {
 
                   <button 
                     onClick={swapCurrencies}
-                    className="p-3.5 gradient-primary rounded-full text-white shadow-lg shadow-primary/30 active:scale-90 transition-transform mt-5 flex-shrink-0"
+                    className="p-3.5 gradient-primary rounded-full text-white shadow-lg shadow-primary/30 active:scale-90 transition-transform mt-5"
                   >
                     <ArrowLeftRight size={20} />
                   </button>
 
-                  <div className="flex-1 space-y-1 text-right min-w-0">
+                  <div className="flex-1 space-y-1 text-right">
                     <label className="text-[10px] font-black uppercase text-slate-400 tracking-widest mr-1">À</label>
                     <select
                       value={toCurrency}
                       onChange={(e) => setToCurrency(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2.5 px-2 text-base font-bold border-none outline-none focus:ring-2 focus:ring-primary/20 appearance-none text-right text-appText dark:text-white truncate"
+                      className="w-full bg-slate-50 dark:bg-slate-900/50 rounded-lg py-2.5 px-2 text-base font-bold border-none outline-none focus:ring-2 focus:ring-primary/20 appearance-none text-right text-appText dark:text-white"
                     >
                       {SUPPORTED_CURRENCIES.map(c => (
                         <option key={c.code} value={c.code} className="dark:bg-iosDarkCard">{c.code} - {c.name}</option>
@@ -254,7 +255,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Result Card */}
-            <div className="gradient-primary text-white rounded-2xl p-8 shadow-2xl shadow-primary/30 relative overflow-hidden w-full">
+            <div className="gradient-primary text-white rounded-2xl p-8 shadow-2xl shadow-primary/30 relative overflow-hidden">
               <div className="relative z-10 flex justify-between items-start">
                 <div className="space-y-1 flex-1 min-w-0">
                   <p className="text-white/80 text-[10px] font-black uppercase tracking-widest">Résultat Conversion</p>
@@ -277,13 +278,13 @@ const App: React.FC = () => {
               <div className="absolute -right-12 -bottom-12 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none" />
             </div>
 
-            <div className="flex items-center justify-center gap-2 text-slate-400 text-[10px] font-black uppercase tracking-[0.15em] w-full">
+            <div className="flex items-center justify-center gap-2 text-slate-400 text-[10px] font-black uppercase tracking-[0.15em]">
               <History size={14} />
               <span>Mis à jour : {lastUpdated || 'Initialisation...'}</span>
             </div>
           </div>
         ) : (
-          <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500 w-full">
+          <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-500">
             {favorites.length === 0 ? (
               <div className="text-center py-20 space-y-6">
                 <div className="w-24 h-24 gradient-primary rounded-full flex items-center justify-center mx-auto text-white shadow-xl shadow-primary/30 opacity-30">
@@ -315,9 +316,9 @@ const App: React.FC = () => {
         )}
       </main>
 
-      {/* Navigation - Fixed to bottom of flex container */}
-      <nav className="flex-none w-full bg-white/90 dark:bg-iosDarkCard/90 backdrop-blur-2xl border-t dark:border-slate-800 px-8 pt-3 pb-safe shadow-[0_-4px_25px_rgba(0,0,0,0.08)] safe-area-pb z-50">
-        <div className="flex justify-around h-16 items-center w-full">
+      {/* Footer: Flex-none and full width within max-width parent */}
+      <nav className="flex-none w-full bg-white/90 dark:bg-iosDarkCard/90 backdrop-blur-2xl border-t dark:border-slate-800 px-8 pt-3 pb-safe shadow-[0_-4px_25px_rgba(0,0,0,0.08)] safe-area-pb">
+        <div className="flex justify-around h-16 items-center">
           <TabButton id="converter" icon={RefreshCw} label="Convertir" />
           <TabButton id="favorites" icon={Star} label="Favoris" />
         </div>
@@ -353,13 +354,13 @@ const FavoriteItem: React.FC<FavoriteItemProps> = ({ fav, isEditing, onRemove, o
   return (
     <div 
       onClick={() => onSelect(fav.from, fav.to)}
-      className={`bg-white dark:bg-iosDarkCard rounded-xl flex items-center shadow-sm transition-all duration-300 border border-slate-100 dark:border-slate-800/50 overflow-hidden w-full ${
+      className={`bg-white dark:bg-iosDarkCard rounded-xl flex items-center shadow-sm transition-all duration-300 border border-slate-100 dark:border-slate-800/50 ${
         isEditing ? 'pl-2' : 'pl-4'
       } pr-4 py-4 active:scale-[0.98] ${
         !isEditing ? 'cursor-pointer hover:border-primary/30 active:bg-slate-50 dark:active:bg-slate-900/50' : 'cursor-default'
       }`}
     >
-      <div className={`transition-all duration-300 flex items-center justify-center overflow-hidden flex-shrink-0 ${isEditing ? 'w-14 opacity-100' : 'w-0 opacity-0'}`}>
+      <div className={`transition-all duration-300 flex items-center justify-center overflow-hidden ${isEditing ? 'w-14 opacity-100' : 'w-0 opacity-0'}`}>
         <button 
           onClick={(e) => {
             e.stopPropagation();
@@ -372,19 +373,19 @@ const FavoriteItem: React.FC<FavoriteItemProps> = ({ fav, isEditing, onRemove, o
         </button>
       </div>
 
-      <div className="flex-1 flex items-center justify-between min-w-0">
-        <div className="flex items-center gap-4 min-w-0">
+      <div className="flex-1 flex items-center justify-between">
+        <div className="flex items-center gap-4">
           <div className="w-12 h-12 gradient-primary text-white rounded-xl flex items-center justify-center font-black text-sm flex-shrink-0 shadow-md shadow-primary/10 uppercase tracking-tighter">
             {fav.from.substring(0, 3)}
           </div>
-          <div className="min-w-0">
-            <h3 className="font-black text-lg leading-tight tracking-tight text-appText dark:text-white uppercase truncate">{fav.from} → {fav.to}</h3>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider truncate">
+          <div>
+            <h3 className="font-black text-lg leading-tight tracking-tight text-appText dark:text-white uppercase">{fav.from} → {fav.to}</h3>
+            <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">
               {rate ? `1 ${fav.from} = ${rate.toFixed(4)} ${fav.to}` : 'Chargement...'}
             </p>
           </div>
         </div>
-        {!isEditing && <ChevronRight size={20} className="text-primary dark:text-white flex-shrink-0" strokeWidth={3} />}
+        {!isEditing && <ChevronRight size={20} className="text-primary dark:text-white" strokeWidth={3} />}
       </div>
     </div>
   );
