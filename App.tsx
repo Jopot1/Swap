@@ -146,10 +146,6 @@ const App: React.FC = () => {
   };
 
   return (
-    /* 
-       Utilisation de left-1/2 et -translate-x-1/2 au lieu de mx-auto 
-       pour un centrage plus robuste sur iOS en mode fixed.
-    */
     <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col h-full w-full max-w-md overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100">
       
       {/* Header */}
@@ -262,8 +258,8 @@ const App: React.FC = () => {
               <div className="relative z-10 flex justify-between items-start">
                 <div className="space-y-1 flex-1 min-w-0">
                   <p className="text-white/80 text-[10px] font-black uppercase tracking-widest">Résultat Conversion</p>
-                  <h2 className="text-5xl font-black truncate drop-shadow-md">
-                    {convertedAmount} <span className="text-2xl font-bold opacity-70 tracking-tight">{toCurrency}</span>
+                  <h2 className="text-[2.6rem] font-black truncate drop-shadow-md leading-tight">
+                    {convertedAmount} <span className="text-xl font-bold opacity-70 tracking-tight">{toCurrency}</span>
                   </h2>
                   <div className="mt-4 inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black tracking-widest uppercase">
                     1 {fromCurrency} = {rates?.rates[toCurrency]?.toFixed(4) || '...'} {toCurrency}
@@ -271,11 +267,11 @@ const App: React.FC = () => {
                 </div>
                 <button 
                   onClick={toggleFavorite}
-                  className={`p-3.5 rounded-full backdrop-blur-lg transition-all ml-4 flex-shrink-0 active:scale-90 ${
+                  className={`p-2.5 rounded-full backdrop-blur-lg transition-all ml-4 flex-shrink-0 active:scale-90 ${
                     isFavorite ? 'bg-white text-primary shadow-xl scale-110' : 'bg-white/20 text-white'
                   }`}
                 >
-                  <Star size={24} fill={isFavorite ? "currentColor" : "none"} strokeWidth={2.5} />
+                  <Star size={22} fill={isFavorite ? "currentColor" : "none"} strokeWidth={2.5} />
                 </button>
               </div>
               <div className="absolute -right-12 -bottom-12 w-40 h-40 bg-white/10 rounded-full blur-3xl pointer-events-none" />
