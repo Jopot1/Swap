@@ -267,7 +267,7 @@ const App: React.FC = () => {
                 </div>
                 <button 
                   onClick={toggleFavorite}
-                  className={`p-2.5 rounded-full backdrop-blur-lg transition-all ml-4 flex-shrink-0 active:scale-90 ${
+                  className={`p-2.5 rounded-full backdrop-blur-lg transition-all ml-2 flex-shrink-0 active:scale-90 ${
                     isFavorite ? 'bg-white text-primary shadow-xl scale-110' : 'bg-white/20 text-white'
                   }`}
                 >
