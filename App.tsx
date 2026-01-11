@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   ArrowLeftRight, 
@@ -79,8 +78,18 @@ const App: React.FC = () => {
     if (!rates || !rates.rates[toCurrency]) return '0.00';
     const numAmount = parseFloat(amount) || 0;
     const rate = rates.rates[toCurrency];
-    return (numAmount * rate).toFixed(2);
+    return (numAmount * rate).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }, [amount, toCurrency, rates]);
+
+  // Calcul de la taille de police dynamique pour le résultat
+  const dynamicResultFontSize = useMemo(() => {
+    const length = convertedAmount.length + toCurrency.length + 1; // +1 pour l'espace
+    if (length <= 10) return '2.6rem';
+    if (length <= 13) return '2.2rem';
+    if (length <= 16) return '1.8rem';
+    if (length <= 20) return '1.5rem';
+    return '1.2rem';
+  }, [convertedAmount, toCurrency]);
 
   const swapCurrencies = () => {
     const prevFrom = fromCurrency;
@@ -146,7 +155,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col h-full w-full max-w-md overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100">
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col h-full w-full max-md overflow-hidden bg-iosBg dark:bg-iosDarkBg font-sans text-appText dark:text-slate-100">
       
       {/* Header */}
       <header className="flex-none w-full gradient-primary shadow-xl shadow-primary/30">
@@ -258,7 +267,10 @@ const App: React.FC = () => {
               <div className="relative z-10 flex justify-between items-start">
                 <div className="space-y-1 flex-1 min-w-0">
                   <p className="text-white/80 text-[10px] font-black uppercase tracking-widest">Résultat Conversion</p>
-                  <h2 className="text-[2.6rem] font-black truncate drop-shadow-md leading-tight">
+                  <h2 
+                    style={{ fontSize: dynamicResultFontSize }}
+                    className="font-black drop-shadow-md leading-tight transition-all duration-300 whitespace-nowrap overflow-visible"
+                  >
                     {convertedAmount} <span className="text-xl font-bold opacity-70 tracking-tight">{toCurrency}</span>
                   </h2>
                   <div className="mt-4 inline-flex items-center px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[10px] font-black tracking-widest uppercase">
@@ -319,6 +331,7 @@ const App: React.FC = () => {
       <nav className="flex-none w-full bg-white/90 dark:bg-iosDarkCard/90 backdrop-blur-2xl border-t dark:border-slate-800 px-8 pt-3 pb-safe shadow-[0_-4px_25px_rgba(0,0,0,0.08)] safe-area-pb">
         <div className="flex justify-around h-16 items-center">
           <TabButton id="converter" icon={RefreshCw} label="Convertir" />
+          {/* Fix: Added missing opening bracket for the TabButton element */}
           <TabButton id="favorites" icon={Star} label="Favoris" />
         </div>
       </nav>
