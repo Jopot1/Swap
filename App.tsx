@@ -254,7 +254,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Result Card */}
-            <div className="gradient-primary text-white rounded-2xl p-8 shadow-2xl shadow-primary/30 relative overflow-hidden">
+            <div className="gradient-primary text-white rounded-2xl p-7 shadow-2xl shadow-primary/30 relative overflow-hidden">
               <div className="relative z-10 flex justify-between items-start">
                 <div className="space-y-1 flex-1 min-w-0">
                   <p className="text-white/80 text-[10px] font-black uppercase tracking-widest">Résultat Conversion</p>
