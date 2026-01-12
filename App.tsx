@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { 
   ArrowLeftRight, 
@@ -74,11 +75,20 @@ const App: React.FC = () => {
     loadRates(fromCurrency);
   }, [fromCurrency, loadRates]);
 
+  // Formate le nombre avec un point comme séparateur (Style US/International)
+  const formatWithPoint = (num: number) => {
+    return num.toLocaleString('en-US', { 
+      minimumFractionDigits: 2, 
+      maximumFractionDigits: 2,
+      useGrouping: true 
+    });
+  };
+
   const convertedAmount = useMemo(() => {
-    if (!rates || !rates.rates[toCurrency]) return '0,00';
-    const numAmount = parseFloat(amount.replace(',', '.')) || 0;
+    if (!rates || !rates.rates[toCurrency]) return '0.00';
+    const numAmount = parseFloat(amount) || 0;
     const rate = rates.rates[toCurrency];
-    return (numAmount * rate).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return formatWithPoint(numAmount * rate);
   }, [amount, toCurrency, rates]);
 
   // Calcul de la taille de police dynamique pour le résultat
@@ -133,7 +143,7 @@ const App: React.FC = () => {
   const isFavorite = favorites.some(f => f.from === fromCurrency && f.to === toCurrency);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Remplacer virgule par point pour la logique interne
+    // Normalisation : on remplace la virgule par un point immédiatement
     let val = e.target.value.replace(',', '.');
     
     // Autoriser uniquement les chiffres et un seul point
@@ -226,10 +236,10 @@ const App: React.FC = () => {
                   <input
                     type="text"
                     inputMode="decimal"
-                    value={amount.replace('.', ',')}
+                    value={amount} // Affiche directement la valeur normalisée avec un point
                     onChange={handleAmountChange}
                     className="w-full text-4xl font-black bg-transparent border-none outline-none focus:ring-0 p-0 text-appText dark:text-white"
-                    placeholder="0,00"
+                    placeholder="0.00"
                   />
                 </div>
 
