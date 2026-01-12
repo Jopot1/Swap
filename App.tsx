@@ -75,8 +75,8 @@ const App: React.FC = () => {
   }, [fromCurrency, loadRates]);
 
   const convertedAmount = useMemo(() => {
-    if (!rates || !rates.rates[toCurrency]) return '0.00';
-    const numAmount = parseFloat(amount) || 0;
+    if (!rates || !rates.rates[toCurrency]) return '0,00';
+    const numAmount = parseFloat(amount.replace(',', '.')) || 0;
     const rate = rates.rates[toCurrency];
     return (numAmount * rate).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }, [amount, toCurrency, rates]);
@@ -131,6 +131,16 @@ const App: React.FC = () => {
   };
 
   const isFavorite = favorites.some(f => f.from === fromCurrency && f.to === toCurrency);
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Remplacer virgule par point pour la logique interne
+    let val = e.target.value.replace(',', '.');
+    
+    // Autoriser uniquement les chiffres et un seul point
+    if (/^[0-9]*\.?[0-9]*$/.test(val) || val === '') {
+      setAmount(val);
+    }
+  };
 
   const TabButton = ({ id, icon: Icon, label }: { id: 'converter' | 'favorites', icon: any, label: string }) => {
     const isActive = activeTab === id;
@@ -214,12 +224,12 @@ const App: React.FC = () => {
                     Montant à convertir
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     inputMode="decimal"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                    value={amount.replace('.', ',')}
+                    onChange={handleAmountChange}
                     className="w-full text-4xl font-black bg-transparent border-none outline-none focus:ring-0 p-0 text-appText dark:text-white"
-                    placeholder="0.00"
+                    placeholder="0,00"
                   />
                 </div>
 
@@ -331,7 +341,6 @@ const App: React.FC = () => {
       <nav className="flex-none w-full bg-white/90 dark:bg-iosDarkCard/90 backdrop-blur-2xl border-t dark:border-slate-800 px-8 pt-3 pb-safe shadow-[0_-4px_25px_rgba(0,0,0,0.08)] safe-area-pb">
         <div className="flex justify-around h-16 items-center">
           <TabButton id="converter" icon={RefreshCw} label="Convertir" />
-          {/* Fix: Added missing opening bracket for the TabButton element */}
           <TabButton id="favorites" icon={Star} label="Favoris" />
         </div>
       </nav>
